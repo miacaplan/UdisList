@@ -15,26 +15,17 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from django.http.response import HttpResponse, JsonResponse
+from django.http.response import HttpResponse
 
 
-def home(request):  # view function
-    # assert False, request.META['HTTP_USER_AGENT']
-    # return HttpResponse("hello <b>world</b>!", status=404)
-    # return HttpResponse("hello <b>world</b>!")
-    # return HttpResponse("hello <b>world</b>!", content_type="text/plain")
-    return JsonResponse({
-        'abc': 12341324,
-        'def': [4,5,6,7,7],
-    })
-
-
-def bar(request):
-    assert False, "called bar"
+def age(request, name, value):  # view function
+    return HttpResponse("{}, you are {} years old.".format(name.title(), value))
 
 
 urlpatterns = [
-    url(r'^$', home),   # urlconf, url, route
-    url(r'^foo/$', bar),
+    url(r'^age/(?P<name>\w+)/(?P<value>\d+)/$', age),
+    url(r'^age/(?P<value>\d+)/(?P<name>\w+)/$', age),
+    url(r'^age/(?P<name>\w+)/$', age, kwargs={'value': '33'}),
+    url(r'^kid/(?P<name>\w+)/$', age, kwargs={'value': '2'}),
     url(r'^admin/', admin.site.urls),
 ]
